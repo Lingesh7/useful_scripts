@@ -1,6 +1,6 @@
 """
     Connect.py
-
+    modified by adding UDFs 
     API wrapper for XTS Connect REST APIs.
 
     :copyright:
@@ -43,7 +43,7 @@ class XTSConnect(XTSCommon):
     """
     """Get the configurations from config.ini"""
     cfg = configparser.ConfigParser()
-    cfg.read('D:/Users/lmahendran/Anaconda3/Lib/site-packages/xts-0.1-py3.7.egg/XTConnect/config.ini')
+    cfg.read(r'C:\Users\WELCOME\anaconda3\Lib\site-packages\xts-0.1-py3.8.egg\XTConnect\config.ini')
 
     # Default root API endpoint. It's possible to
     # override this by passing the `root` parameter during initialisation.
@@ -706,20 +706,20 @@ class XTSConnect(XTSCommon):
         return instrument_df
             
     
-    def fo_lookup(self, symbol, instrument_df=None):
+    def fo_lookup(self, symbol, instrument_df=[]):
         """Looks up instrument token for a given script from instrument dump"""
-        instrument_df = self.master_fo_dump()
+        df = self.master_fo_dump() if len(instrument_df) == 0 else instrument_df
         try:
-            return instrument_df[instrument_df.Description==symbol].ExchangeInstrumentID.values[0]
+            return int(df[df.Description==symbol].ExchangeInstrumentID.values[0])
         except:
             return -1
     
     
-    def eq_lookup(self, symbol, instrument_df=None):
+    def eq_lookup(self, symbol, instrument_df=[]):
         """Looks up instrument token for a given script from instrument dump"""
-        instrument_df = self.master_eq_Dump()
+        df = self.master_eq_dump() if len(instrument_df) == 0 else instrument_df
         try:
-            return int(instrument_df[instrument_df.Name==symbol].ExchangeInstrumentID.values[0])
+            return int(df[df.Name==symbol].ExchangeInstrumentID.values[0])
         except:
             return -1
 
