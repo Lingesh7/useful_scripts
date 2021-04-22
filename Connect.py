@@ -664,7 +664,7 @@ class XTSConnect(XTSCommon):
             file = Path(filename)
             if file.exists() and (date.today() == date.fromtimestamp(file.stat().st_mtime)):
                 logger.info('UDF: MasterDump already exists.. reading directly')
-                instrument_df = pd.read_csv(filename,header='infer')
+                mstr_df = pd.read_csv(filename,header='infer')
             else:
                 logger.info('UDF: Creating FO MasterDump..')
                 exchangesegments = [self.EXCHANGE_NSEFO]
@@ -673,12 +673,12 @@ class XTSConnect(XTSCommon):
                 master=mastr_resp['result']
                 spl=master.split('\n')
                 mstr_df = pd.DataFrame([sub.split("|") for sub in spl],columns=(['ExchangeSegment','ExchangeInstrumentID','InstrumentType','Name','Description','Series','NameWithSeries','InstrumentID','PriceBand.High','PriceBand.Low','FreezeQty','TickSize',' LotSize','UnderlyingInstrumentId','UnderlyingIndexName','ContractExpiration','StrikePrice','OptionType']))
-                instrument_df = mstr_df[mstr_df.Series == 'OPTIDX']
-                instrument_df.to_csv(f"../ohlc/NSE_FO_Instruments_{self.CDATE}.csv",index=False)
+                # instrument_df = mstr_df[mstr_df.Series == 'OPTIDX']
+                mstr_df.to_csv(f"../ohlc/NSE_FO_Instruments_{self.CDATE}.csv",index=False)
         except Exception as e:
             logger.exception(f"Error Response : {e}")
         
-        return instrument_df
+        return mstr_df
     
         
     def master_eq_dump(self):
