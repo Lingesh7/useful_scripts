@@ -43,7 +43,7 @@ class XTSConnect(XTSCommon):
     """
     """Get the configurations from config.ini"""
     cfg = configparser.ConfigParser()
-    cfg.read(r'C:\Users\WELCOME\anaconda3\Lib\site-packages\xts-0.1-py3.8.egg\XTConnect\config.ini')
+    cfg.read(r'D:\Users\lmahendran\Anaconda3\Lib\site-packages\xts-0.1-py3.7.egg\XTConnect\config.ini')
 
     # Default root API endpoint. It's possible to
     # override this by passing the `root` parameter during initialisation.
@@ -624,8 +624,8 @@ class XTSConnect(XTSCommon):
             if 'result' in xpry_resp:
                 expiry_dates = xpry_resp['result']
             else:
-                logger.info('UDF: Error getting Expiry dates..')
-                raise ex.XTSDataException('Issue in getting expiry dates')
+                logger.error(f"UDF: Error getting Expiry dates. Reason:{xpry_resp['description']}")
+                raise ex.XTSDataException('No response received: ')
         
             thu = (now + relativedelta(weekday=TH(1))).strftime('%d%b%Y')
             wed = (now + relativedelta(weekday=WE(1))).strftime('%d%b%Y')
@@ -962,7 +962,7 @@ class XTSConnect(XTSCommon):
             raise e
 
         if self.debug:
-            log.debug("Response: {code} {content}".format(code=r.status_code, content=r.content))
+            logger.debug("Response: {code} {content}".format(code=r.status_code, content=r.content))
 
         # Validate the content type.
         if "json" in r.headers["content-type"]:
