@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="PostgreSQL" id="Project_ea5" database="PostgreSQL" >
+	<schema name="public" >
+		<comment><![CDATA[standard public schema]]></comment>
+		<table name="broker" >
+			<column name="id" type="integer" jt="4" mandatory="y" sequence="broker_id_seq" />
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="customer_id" type="smallserial" length="5" decimal="0" jt="5" mandatory="y" >
+				<defo><![CDATA[nextval('broker_customer_id_seq'::regclass)]]></defo>
+			</column>
+			<index name="pk_broker_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_broker_customer" to_schema="public" to_table="customer" >
+				<fk_column name="customer_id" pk="id" />
+			</fk>
+		</table>
+		<table name="customer" >
+			<column name="id" type="smallserial" length="5" decimal="0" jt="5" mandatory="y" >
+				<defo><![CDATA[nextval('customer_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="first_name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="last_name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="mobile" type="bigint" length="19" decimal="0" jt="-5" />
+			<column name="mail" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="address" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="active" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="telegram_id" type="integer" length="10" decimal="0" jt="4" />
+			<column name="created_at" type="timestamp" length="0" decimal="6" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="0" decimal="6" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_customer_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="strategy" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="min_multiplier" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[1]]></defo>
+			</column>
+			<column name="capital_required" type="numeric" length="12" decimal="2" jt="2" />
+			<column name="price_per_month" type="numeric" length="10" decimal="2" jt="2" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="description" type="text" decimal="0" jt="12" >
+				<defo><![CDATA['FirstChoice Strategy'::text]]></defo>
+			</column>
+			<column name="strategy_params_id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('strategy_strategy_params_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="created_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_strategy_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="subscribers" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="customer_id" type="smallserial" jt="5" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_customer_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="strategy_id" type="integer" jt="4" mandatory="y" />
+			<column name="run_counter" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_run_counter_seq'::regclass)]]></defo>
+			</column>
+			<column name="is_active" prior="status" type="char" length="1" jt="1" mandatory="y" />
+			<column name="start_date" prior="start_time" type="date" length="0" jt="91" mandatory="y" >
+				<defo><![CDATA[current_date]]></defo>
+			</column>
+			<column name="end_date" prior="end_time" type="date" length="0" jt="91" mandatory="y" />
+			<column name="created_at" type="timestamp" length="0" decimal="6" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="0" decimal="6" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_subscribers_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_subscribers_customer" to_schema="public" to_table="customer" >
+				<fk_column name="customer_id" pk="id" />
+			</fk>
+			<fk name="fk_subscribers_broker" to_schema="public" to_table="strategy" >
+				<fk_column name="strategy_id" pk="id" />
+			</fk>
+		</table>
+		<sequence name="broker_customer_id_seq" options="START WITH 1" />
+		<sequence name="broker_id_seq" options="START WITH 1 " />
+		<sequence name="customer_id_seq" options="START WITH 1" />
+		<sequence name="strategy_id_seq" options="START WITH 500" />
+		<sequence name="strategy_strategy_params_id_seq" options="START WITH 1" />
+		<sequence name="subscriber_id_seq" options="START WITH 1000" />
+		<sequence name="subscribers_customer_id_seq" options="START WITH 1" />
+		<sequence name="subscribers_id_seq" options="START WITH 1" />
+		<sequence name="subscribers_run_counter_seq" options="START WITH 1" />
+		<trigger name="set_timestamp" table="subscribers" id="Trigger_15d9" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.subscribers FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<trigger name="set_timestamp" table="strategy" id="Trigger_326" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.strategy FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<trigger name="set_timestamp" table="customer" id="Trigger_fe6" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.customer FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<function name="trigger_set_timestamp" id="Function_a70" isSystem="false" params_known="y" >
+			<string><![CDATA[CREATE OR REPLACE FUNCTION public.trigger_set_timestamp()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$function$
+;]]></string>
+			<result_param jt="-1" />
+		</function>
+	</schema>
+	<connector name="PostgreSQL" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.2.18.jar" driver_desc="Standard" host="localhost" port="5432" instance="fcdb" user="postgres" passwd="cG9zdGdyZXM=" />
+	<layout name="Layout with Tools" id="Layout_200a" show_column_type="y" show_relation="columns" >
+		<entity schema="public" name="broker" color="C1D8EE" x="48" y="400" />
+		<entity schema="public" name="customer" color="3986C1" x="48" y="96" />
+		<entity schema="public" name="strategy" color="3986C1" x="784" y="96" />
+		<entity schema="public" name="subscribers" color="C1D8EE" x="416" y="48" />
+		<script name="Sample SQL Editor" id="Editor_227a" language="SQL" >
+			<string><![CDATA[timestamp();]]></string>
+		</script>
+		<script name="strategy" id="Editor_d58" language="SQL" >
+			<string><![CDATA[DROP TABLE "public".strategy;
+
+CREATE TABLE "public".strategy ( id integer NOT NULL , 
+                                name varchar(100) NOT NULL , 
+                                min_multiplier integer DEFAULT 1 NOT NULL , 
+                                capital_required decimal(12,2) , 
+                                price_per_month decimal(10,2) DEFAULT 0 NOT NULL , 
+                                description text DEFAULT 'FirstChoice Strategy' ,
+                                strategy_params_id SERIAL,
+                                created_at TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ,
+								updated_at TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ,
+                                CONSTRAINT pk_strategy_id PRIMARY KEY ( id ) )
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON strategy
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+INSERT INTO "public".strategy
+	( id, name, min_multiplier, capital_required, price_per_month, description) VALUES 
+	( nextval('strategy_id_seq'), 'NFO Panther', 1, 700000, 1000, 'BUY 2 lots and SELL 1 lot at SL, Same cont for every 1 hour');
+
+select * from customer;
+UPDATE public.strategy SET capital_required=1000 WHERE ID = 504;
+
+select char_length(updated_at::varchar) from strategy;
+select (updated_at) from strategy;]]></string>
+		</script>
+		<script name="subscribers" id="Editor_168f" language="SQL" >
+			<string><![CDATA[INSERT INTO "public".subscribers
+	( id, customer_id, strategy_id, is_active, start_date, end_date) VALUES
+ (nextval('subscriber_id_seq'), 10000, 504, 'Y',  CURRENT_DATE ,CURRENT_DATE + INTERVAL '30 day' );
+
+select * from subscribers;]]></string>
+		</script>
+	</layout>
+	<layout name="Main Layout" id="Layout_258b" show_relation="columns" >
+		<entity schema="public" name="customer" color="3986C1" x="48" y="144" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[Double-click table headers, columns, or foreign keys to edit. 
+Create multiple layouts (diagrams) with the same or different tables. 
+Saving the model to file will also save the layouts.]]></comment>
+		</callout>
+	</layout>
+</project>
