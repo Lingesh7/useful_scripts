@@ -495,12 +495,12 @@ class XTSConnect(XTSCommon):
             return 0
 
 
-    def place_order_id(self,symbol,txn_type,qty,xseg='fo'):
+    def place_order_id(self,symbol,txn_type,qty,sl=0,xseg='fo'):
         logger.info('UDF: Placing Orders..')
         # Place an intraday stop loss order on NSE
         order_id = None
-        
         segment = self.EXCHANGE_NSEFO if xseg.upper() == 'FO' else self.EXCHANGE_NSECM
+        o_type = self.ORDER_TYPE_MARKET if sl == 0 else 'StopMarket'
         if txn_type == "buy":
             t_type = self.TRANSACTION_TYPE_BUY
         elif txn_type == "sell":
@@ -509,13 +509,13 @@ class XTSConnect(XTSCommon):
             order_resp = self.place_order(exchangeSegment=segment,
                              exchangeInstrumentID= symbol ,
                              productType=self.PRODUCT_MIS,
-                             orderType=self.ORDER_TYPE_MARKET,
+                             orderType=o_type,
                              orderSide=t_type,
                              timeInForce=self.VALIDITY_DAY,
                              disclosedQuantity=0,
                              orderQuantity=qty,
                              limitPrice=0,
-                             stopPrice=0,
+                             stopPrice=sl,
                              orderUniqueIdentifier="FC_MarketOrder"
                              )
             #print(order_resp)
