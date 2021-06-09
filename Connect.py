@@ -43,7 +43,7 @@ class XTSConnect(XTSCommon):
     """
     """Get the configurations from config.ini"""
     cfg = configparser.ConfigParser()
-    cfg.read(r'D:\Users\lmahendran\Anaconda3\Lib\site-packages\xts-0.1-py3.7.egg\XTConnect\config.ini')
+    cfg.read(r'C:\Users\WELCOME\anaconda3\Lib\site-packages\xts-0.1-py3.8.egg\XTConnect\config.ini')
 
     # Default root API endpoint. It's possible to
     # override this by passing the `root` parameter during initialisation.
@@ -585,7 +585,7 @@ class XTSConnect(XTSCommon):
         if idx == 'NIFTY':
             base = 50
             ids = 'NIFTY 50'
-        elif idx == 'NIFTYBANK':
+        elif idx == 'BANKNIFTY' or idx == 'NIFTYBANK':
             base = 100
             ids = 'NIFTY BANK'
         # if idx in idxs:
