@@ -698,7 +698,8 @@ class XTSConnect(XTSCommon):
                 master = mastr_resp['result']
                 spl=master.split('\n')
                 mstr_df = pd.DataFrame([sub.split("|") for sub in spl],columns=(['ExchangeSegment','ExchangeInstrumentID','InstrumentType','Name','Description','Series','NameWithSeries','InstrumentID','PriceBand.High','PriceBand.Low','FreezeQty','TickSize',' LotSize']))
-                instrument_df = mstr_df[mstr_df.Series == 'EQ']
+                # instrument_df = mstr_df[mstr_df.Series == 'EQ']
+                instrument_df = mstr_df[(mstr_df.Series == 'EQ') | (mstr_df.Series == 'BE')]
                 instrument_df.to_csv(f"../ohlc/NSE_EQ_Instruments_{self.CDATE}.csv",index=False)
         except Exception as e:
             logger.exception(f"Error Response : {e}")
