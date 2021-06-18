@@ -539,16 +539,21 @@ class XTSConnect(XTSCommon):
             while a<12:
                 order_lists = self.get_order_list()
                 if order_lists:
-                    new_orders = [ol for ol in order_lists if ol['AppOrderID'] == order_id and ol['OrderStatus'] != 'Filled']
-                    if not new_orders:
-                        tradedPrice = float(next((orderList['OrderAverageTradedPrice'] \
-                                            for orderList in order_lists \
-                                                if orderList['AppOrderID'] == order_id and\
-                                                    orderList['OrderStatus'] == 'Filled'),None).replace(',', ''))
-                        LastUpdateDateTime=datetime.fromisoformat(next((orderList['LastUpdateDateTime'] for orderList in order_lists if orderList['AppOrderID'] == order_id and orderList['OrderStatus'] == 'Filled'))[0:19])
+                    # new_orders = [ol for ol in order_lists if ol['AppOrderID'] == order_id and ol['OrderStatus'] != 'Filled']
+                    o_status = [ol['OrderStatus'] for ol in order_lists \
+                                  if ol['AppOrderID'] == order_id and ol['OrderStatus'] == 'Filled']
+                    if o_status == 'Filled':
+                        # tradedPrice = float(next((orderList['OrderAverageTradedPrice'] \
+                        #                     for orderList in order_lists \
+                        #                         if orderList['AppOrderID'] == order_id and\
+                        #                             orderList['OrderStatus'] == 'Filled'),None).replace(',', ''))
+                        tradedPrice = float([ i['OrderAverageTradedPrice'] for i in order_lists \
+                                            if i['AppOrderID'] == order_id ][0].replace(',', ''))    
+                        # LastUpdateDateTime=datetime.fromisoformat(next((orderList['LastUpdateDateTime'] for orderList in order_lists if orderList['AppOrderID'] == order_id and orderList['OrderStatus'] == 'Filled'))[0:19])
+                        LastUpdateDateTime = datetime.fromisoformat([i['LastUpdateDateTime'] for i in order_lists \
+                                            if i['AppOrderID'] == order_id ][0][0:19])
                         dateTime = LastUpdateDateTime.strftime("%Y-%m-%d %H:%M:%S")
-                        logger.info(f"traded price is: {tradedPrice} and ordered  time is: {dateTime}")
-                        # return tradedPrice, dateTime
+                        logger.info(f"orderid {order_id} - traded price: {tradedPrice} at time: {dateTime}")
                         break
                         # loop = False
                     else:
