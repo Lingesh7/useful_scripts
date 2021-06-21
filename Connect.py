@@ -541,7 +541,8 @@ class XTSConnect(XTSCommon):
                 if order_lists:
                     # new_orders = [ol for ol in order_lists if ol['AppOrderID'] == order_id and ol['OrderStatus'] != 'Filled']
                     o_status = [ol['OrderStatus'] for ol in order_lists \
-                                  if ol['AppOrderID'] == order_id and ol['OrderStatus'] == 'Filled'][0]
+                                  if ol['AppOrderID'] == order_id ][0] #and ol['OrderStatus'] == 'Filled']
+                    
                     if o_status == 'Filled':
                         # tradedPrice = float(next((orderList['OrderAverageTradedPrice'] \
                         #                     for orderList in order_lists \
