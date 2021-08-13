@@ -85,6 +85,10 @@ class XTSConnect(XTSCommon):
     EXCHANGE_MCXFO = "MCXFO"
     EXCHANGE_BSECM = "BSECM"
     
+    #master dump columns
+    EXCHANGE_NSEFO_SCHEMA = ['exchange_segment','exchange_instrument_id','instrument_type','name','description','series','name_with_series','instrument_id','price_band_high','price_band_low','freeze_qty','ticksize',' lotsize','underlying_instrument_id','underlying_index_name','contract_expiration','strike_price','option_type']
+    EXCHANGE_NSECM_SCHEMA = ['exchange_segment','exchange_instrument_id','instrument_type','name','description','series','name_with_series','instrument_id','price_band_high','price_band_low','freeze_qty','ticksize',' lotsize']
+    
     #current date
     CDATE = datetime.strftime(datetime.now(), "%d-%m-%Y")
     # URIs to various calls
