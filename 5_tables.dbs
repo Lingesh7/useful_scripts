@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="PostgreSQL" id="Project_1565" database="PostgreSQL" >
+	<schema name="public" >
+		<comment><![CDATA[standard public schema]]></comment>
+		<table name="broker" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('broker_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_broker_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="customer" >
+			<column name="id" type="smallserial" length="5" decimal="0" jt="5" mandatory="y" >
+				<defo><![CDATA[nextval('customer_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="first_name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="last_name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="mobile" type="bigint" length="19" decimal="0" jt="-5" />
+			<column name="mail" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="address" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="active" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="telegram_id" type="integer" length="10" decimal="0" jt="4" />
+			<column name="created_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_customer_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="strategy" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="min_multiplier" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[1]]></defo>
+			</column>
+			<column name="capital_required" type="numeric" length="12" decimal="2" jt="2" />
+			<column name="price_per_month" type="numeric" length="10" decimal="2" jt="2" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="description" type="text" decimal="0" jt="12" >
+				<defo><![CDATA['FirstChoice Strategy'::text]]></defo>
+			</column>
+			<column name="strategy_params_id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('strategy_strategy_params_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="created_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_strategy_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="strategy_params" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('strategy_params_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="strategy_id" type="integer" length="10" decimal="0" jt="4" />
+			<column name="script_name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="start_time" type="text[]" decimal="0" jt="2003" />
+			<column name="repair_time" type="time" length="15" decimal="6" jt="92" />
+			<column name="end_time" type="time" length="15" decimal="6" jt="92" >
+				<defo><![CDATA['15:05:00'::time without time zone]]></defo>
+			</column>
+			<column name="target" type="numeric" length="7" decimal="2" jt="2" />
+			<column name="stop_loss" type="numeric" length="7" decimal="2" jt="2" />
+			<column name="created_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_strategy_params_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_strategy_params_strategy" to_schema="public" to_table="strategy" >
+				<fk_column name="strategy_id" pk="id" />
+			</fk>
+		</table>
+		<table name="subscribers" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="customer_id" type="smallserial" length="5" decimal="0" jt="5" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_customer_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="strategy_id" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="broker_id" type="integer" length="10" decimal="0" jt="4" />
+			<column name="run_counter" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('subscribers_run_counter_seq'::regclass)]]></defo>
+			</column>
+			<column name="is_active" type="char" length="1" decimal="0" jt="1" mandatory="y" />
+			<column name="start_date" type="date" length="13" decimal="0" jt="91" />
+			<column name="end_date" type="date" length="13" decimal="0" jt="91" />
+			<column name="created_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updated_at" type="timestamp" length="22" decimal="0" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_subscribers_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_subscribers_customer" to_schema="public" to_table="customer" >
+				<fk_column name="customer_id" pk="id" />
+			</fk>
+			<fk name="fk_subscribers_strategy" to_schema="public" to_table="strategy" >
+				<fk_column name="strategy_id" pk="id" />
+			</fk>
+			<fk name="fk_subscribers_broker" to_schema="public" to_table="broker" >
+				<fk_column name="broker_id" pk="id" />
+			</fk>
+		</table>
+		<sequence name="broker_id_seq" options="START WITH 1" />
+		<sequence name="customer_id_seq" options="START WITH 1" />
+		<sequence name="strategy_id_seq" options="START WITH 501" />
+		<sequence name="strategy_params_id_seq" options="START WITH 1" />
+		<sequence name="strategy_strategy_params_id_seq" options="START WITH 1" />
+		<sequence name="subscriber_id_seq" options="START WITH 5000" />
+		<sequence name="subscribers_customer_id_seq" options="START WITH 1" />
+		<sequence name="subscribers_id_seq" options="START WITH 1" />
+		<sequence name="subscribers_run_counter_seq" options="START WITH 1" />
+		<sequence name="user_id_seq" options="START WITH 10000" />
+		<trigger name="set_timestamp" table="customer" id="Trigger_1656" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.customer FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<trigger name="set_timestamp" table="strategy_params" id="Trigger_5db" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.strategy_params FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<trigger name="set_timestamp" table="strategy" id="Trigger_207a" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.strategy FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<trigger name="set_timestamp" table="subscribers" id="Trigger_24f8" isSystem="false" >
+			<string><![CDATA[CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.subscribers FOR EACH ROW EXECUTE FUNCTION trigger_set_timestamp();]]></string>
+		</trigger>
+		<function name="trigger_set_timestamp" id="Function_2192" isSystem="false" params_known="y" >
+			<string><![CDATA[CREATE OR REPLACE FUNCTION public.trigger_set_timestamp()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$function$
+;]]></string>
+			<result_param jt="-1" />
+		</function>
+	</schema>
+	<connector name="PostgreSQL" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.2.18.jar" driver_desc="Standard" host="localhost" port="5432" instance="fcdb" user="postgres" passwd="cG9zdGdyZXM=" />
+	<layout name="Layout with Tools" id="Layout_1c6d" show_column_type="y" show_relation="columns" >
+		<entity schema="public" name="broker" color="3986C1" x="928" y="48" />
+		<entity schema="public" name="customer" color="BED3F4" x="320" y="352" />
+		<entity schema="public" name="strategy" color="BED3F4" x="320" y="48" />
+		<entity schema="public" name="strategy_params" color="BED3F4" x="624" y="48" />
+		<entity schema="public" name="subscribers" color="BED3F4" x="48" y="48" />
+		<script name="Sample SQL Editor" id="Editor_1de0" language="SQL" >
+			<string><![CDATA[SELECT id, name, min_multiplier, capital_required, price_per_month, description, strategy_params_id, created_at, updated_at
+FROM
+	"public".strategy y;]]></string>
+		</script>
+		<browser id="Browse_9f3" name="Sample Relational Data Explorer" confirm_updates="y" >
+			<browse_table schema="public" entity="strategy" x="20" y="20" width="400" height="300" >
+				<browse_table schema="public" entity="strategy_params" fk="fk_strategy_params_strategy" x="440" y="20" width="500" height="350" />
+			</browse_table>
+		</browser>
+		<query id="Query_20a8" name="Sample Query Builder" >
+			<query_table schema="public" name="strategy" alias="s" x="48" y="48" >
+				<column name="id" />
+				<column name="name" />
+				<column name="min_multiplier" />
+				<column name="capital_required" />
+				<column name="price_per_month" />
+				<column name="description" />
+				<column name="strategy_params_id" />
+				<column name="created_at" />
+				<column name="updated_at" />
+				<query_table schema="public" name="strategy_params" alias="sp" x="256" y="48" fk="fk_strategy_params_strategy" type="Inner Join" >
+					<column name="id" />
+					<column name="name" />
+					<column name="strategy_id" />
+					<column name="script_name" />
+					<column name="start_time" />
+					<column name="repair_time" />
+					<column name="end_time" />
+					<column name="target" />
+					<column name="stop_loss" />
+					<column name="created_at" />
+					<column name="updated_at" />
+				</query_table>
+			</query_table>
+		</query>
+		<form name="Sample Report" id="Report_784" template="Wide Page" view="frame" >
+			<var name="samplePageNumber" type="4" value="0" mandatory="n" />
+			<var name="sampleRecordsPerPage" type="4" value="100" mandatory="n" />
+			<body name="Body" template="Grid" pos="0,0,0,0,f,f" layout="{{-2,-2,-2,-2,-1},{-2,-2,-2}}" scroll="n" html="n" >
+				<cell type="label" name="sample" template="H3" pos="0,0,1,0,l,c" />
+				<tableview name="sample" template="Table" css="table table-striped table-bordered table-sm table-hover" pos="0,1,4,1,f,f" layout="{{-2,-2,-2,-2,-2,-2,-2,-2,-2},{-2,-2}}" scroll="n" html="n" header_rows="1" >
+					<form_script type="DataSource" language="SQL" >
+						<var name="id" type="4" />
+						<var name="name" />
+						<var name="min_multiplier" type="4" />
+						<var name="capital_required" type="2" />
+						<var name="price_per_month" type="2" />
+						<var name="description" />
+						<var name="strategy_params_id" type="4" />
+						<var name="created_at" type="93" />
+						<var name="updated_at" type="93" />
+						<script ><![CDATA[SELECT * FROM "public".strategy]]></script>
+					</form_script>
+					<cell type="label" name="id" pos="0,0,0,0,c,c" />
+					<cell type="label" name="name" pos="1,0,1,0,c,c" />
+					<cell type="label" name="min_multiplier" pos="2,0,2,0,c,c" />
+					<cell type="label" name="capital_required" pos="3,0,3,0,c,c" />
+					<cell type="label" name="price_per_month" pos="4,0,4,0,c,c" />
+					<cell type="label" name="description" pos="5,0,5,0,c,c" />
+					<cell type="label" name="strategy_params_id" pos="6,0,6,0,c,c" />
+					<cell type="label" name="created_at" pos="7,0,7,0,c,c" />
+					<cell type="label" name="updated_at" pos="8,0,8,0,c,c" />
+					<cell type="label" name="${id}" template="Plain" pos="0,1,0,1,l,c" />
+					<cell type="label" name="${name}" template="Plain" pos="1,1,1,1,l,c" />
+					<cell type="label" name="${min_multiplier}" template="Plain" pos="2,1,2,1,l,c" />
+					<cell type="label" name="${capital_required}" template="Plain" pos="3,1,3,1,l,c" />
+					<cell type="label" name="${price_per_month}" template="Plain" pos="4,1,4,1,l,c" />
+					<cell type="label" name="${description}" template="Plain" pos="5,1,5,1,l,c" />
+					<cell type="label" name="${strategy_params_id}" template="Plain" pos="6,1,6,1,l,c" />
+					<cell type="label" name="${created_at}" template="Plain" pos="7,1,7,1,l,c" />
+					<cell type="label" name="${updated_at}" template="Plain" pos="8,1,8,1,l,c" />
+				</tableview>
+				<cell type="href" name="" disabled="${samplePageNumber&lt;1}" pos="0,2,0,2,l,c" glyph="FA-ANGLE_DOUBLE_LEFT" ref_id="Report_784" >
+					<var name="samplePageNumber" value="0" />
+				</cell>
+				<cell type="href" name="" disabled="${samplePageNumber&lt;1}" pos="1,2,1,2,l,c" glyph="FA-ANGLE_LEFT" ref_id="Report_784" >
+					<var name="samplePageNumber" value="${Math.max(0,samplePageNumber-1)}" />
+				</cell>
+				<cell type="label" name="Page ${samplePageNumber+1}" pos="2,2,2,2,l,c" />
+				<cell type="href" name="" disabled="${!sampleHasNextPage}" pos="3,2,3,2,l,c" glyph="FA-ANGLE_RIGHT" ref_id="Report_784" >
+					<var name="samplePageNumber" value="${( samplePageNumber+1 )}" />
+				</cell>
+			</body>
+		</form>
+	</layout>
+	<layout name="Main Layout" id="Layout_397" show_relation="columns" >
+		<entity schema="public" name="broker" color="3986C1" x="160" y="80" />
+		<entity schema="public" name="customer" color="BED3F4" x="160" y="448" />
+		<entity schema="public" name="strategy" color="BED3F4" x="256" y="192" />
+		<entity schema="public" name="strategy_params" color="BED3F4" x="512" y="192" />
+		<entity schema="public" name="subscribers" color="BED3F4" x="48" y="192" />
+		<callout x="864" y="80" pointer="Round" >
+			<comment><![CDATA[Double-click table headers, columns, or foreign keys to edit. 
+Create multiple layouts (diagrams) with the same or different tables. 
+Saving the model to file will also save the layouts.]]></comment>
+		</callout>
+		<group name="subscribers" color="ECF0F7" >
+			<entity schema="public" name="subscribers" />
+			<entity schema="public" name="strategy" />
+			<entity schema="public" name="customer" />
+			<entity schema="public" name="strategy_params" />
+		</group>
+	</layout>
+</project>
